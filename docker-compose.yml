@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    environment:
+      DJANGO_DEBUG: "True"  # this must be a string!
+      DJANGO_SECRET_KEY: 'this_is_very_secret_so_you_must_change_this_on_production'
