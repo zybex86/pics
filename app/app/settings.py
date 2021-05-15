@@ -3,7 +3,7 @@ from pathlib import Path
 
 oeg = os.environ.get
 
-DEBUG = oeg('DJANGO_DEBUG', 'False').lower() == 'true'
+DEBUG = True
 SECRET_KEY = oeg(
     'DJANGO_SECRET_KEY', 'this_is_very_secret_so_you_must_change_this_on_production'
 )
@@ -34,10 +34,12 @@ INSTALLED_APPS = [
     
     # Thirdparty apps
     'rest_framework',
+    'rest_framework.authtoken',
 
     # Main apps
     'core',
-    'thumbnails'
+    'thumbnails',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -100,7 +102,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     )
 }
 

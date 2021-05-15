@@ -1,11 +1,13 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from pics.uploader.views import ThumbnailViewSet
+from thumbnails.views import ThumbnailViewSet
 
 
 router = DefaultRouter()
-router.register(r'thumbnails', ThumbnailViewSet)
+router.register('links', ThumbnailViewSet, basename='link')
+
+app_name = 'thumbnails'
 
 urlpatterns = [
     path('', include(router.urls))
