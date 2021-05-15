@@ -1,9 +1,19 @@
+import uuid
+from pathlib import Path
+
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin
 )
+from django.utils.translation import gettext_lazy as _
+
+
+def thumbnail_file_path(instance, filename):
+    ext = Path(filename).suffix
+    filename = f'{uuid.uuid4()}{ext}'
+    return Path('uploads/thumbnail') / filename
 
 
 class UserManager(BaseUserManager):
@@ -17,7 +27,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
-    
+
     def create_superuser(self, email, password):
         user = self.create_user(email, password)
         user.is_staff = True
@@ -37,3 +47,23 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+
+class Thumbnail(models.Model):
+    name = models.CharField(_('name'), max_length=255)
+    image = models.ImageField(
+        _('image file'),
+        max_length=100,
+        upload_to=thumbnail_file_path,
+    )
+
+    owner = models.ForeignKey(
+        User,
+        related_name='thumbnails',
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = _('thumnail')
+        verbose_name_plural = _('thumnails')
+        ordering = ('name',)

@@ -22,6 +22,10 @@ You can run the application in two ways:
 
     git clone https://github.com/zybex86/pics.git
 
+1. Install dependency for Postgres:
+
+    sudo apt install libpq-dev
+
 1. Create a virtual environment:
 
     mkvirtualenv -p python3 env_name 

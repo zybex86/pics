@@ -1,5 +1,10 @@
+from pathlib import Path
+from unittest.mock import patch
+
 import pytest
 from django.contrib.auth import get_user_model
+
+from core.models import thumbnail_file_path
 
 
 @pytest.mark.django_db
@@ -41,3 +46,14 @@ def test_create_superuser():
 
     assert user.is_superuser
     assert user.is_staff
+
+
+@patch('uuid.uuid4')
+@pytest.mark.django_db
+def test_recipe_file_name_uuid(mock_uuid):
+    """Test that image is saved in correct location"""
+    uuid = 'test-uuid'
+    mock_uuid.return_value = uuid
+    file_path = thumbnail_file_path(None, 'myimage.jpg')
+
+    assert file_path == Path('uploads/thumbnail/') / f'{uuid}.jpg'
